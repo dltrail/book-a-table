@@ -10,7 +10,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSearchChange, onCle
   return (
     <div className="text-center">
       <input
-        className="border-[1px] border-black p-2 w-3/4 mx-auto"
+        className="border-[1px] border-black p-2 w-3/4 mx-auto my-4"
         type="text"
         placeholder="Search properties..."
         value={searchTerm}

@@ -4,15 +4,16 @@ import { getRestaurants } from "../services/api";
 import { Restaurant } from "../types";
 import RestaurantListItem from "./RestaurantListItem";
 import LoadingSpinner from "./Loading";
+import SortComponent from "./SortComponent";
+import NoResults from "./NoResults";
 
 type RestaurantListProps = {
   onRestaurantSelect: (id: number) => void;
-  sortOrder: string
-  searchTerm: string
+  searchTerm: string;
 };
 
 const RestaurantList: React.FC<RestaurantListProps> = ({
-  onRestaurantSelect, sortOrder, searchTerm
+  onRestaurantSelect, searchTerm
 }) => {
 
   const [data, setData] = useState<Restaurant[]>([]);
@@ -20,6 +21,14 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [paginationLimit, setPaginationLimit] = useState(10);
   const [isPaginationLoading, setIsPaginationLoading] = useState(false);
+
+  const [sortOrder, setSortOrder] = useState('asc'); // State for sorting order
+
+
+  const handleSortOrderChange = (order: string) => {
+    // Implement sorting logic based on the order parameter
+    setSortOrder(order);
+  };
 
   // const [sortOrder, setSortOrder] = useState('asc'); // State for sorting order
 
@@ -59,44 +68,40 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
     const ratingB = b.rating;
 
     return sortOrder === 'asc' ? ratingA - ratingB : ratingB - ratingA;
-});
+  });
 
-const filteredProperties = restaurantsSortedByRating.filter(
-  (restaurant) => restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by location (or any other field)
-);
+  const filteredProperties = restaurantsSortedByRating.filter(
+    (restaurant) => restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by location (or any other field)
+  );
 
-const limitedData = useMemo(() => filteredProperties.slice(0, paginationLimit), [filteredProperties, paginationLimit]); // limitedData is memoized so it's only recalculated when data or paginationLimit changes.
+  const limitedData = useMemo(() => filteredProperties.slice(0, paginationLimit), [filteredProperties, paginationLimit]); // limitedData is memoized so it's only recalculated when data or paginationLimit changes.
 
 
-//   const handleSortOrderChange = (order: string) => {
-//     // Implement sorting logic based on the order parameter
-//     setSortOrder(order);
-// };
+  //   const handleSortOrderChange = (order: string) => {
+  //     // Implement sorting logic based on the order parameter
+  //     setSortOrder(order);
+  // };
 
   return (
     <Container>
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
-    
+      {limitedData.length === 0 ?
+        (<NoResults searchTerm={searchTerm}/>) :
 
-      <ListGroup>
-        {limitedData.map((restaurant) => (
-          <RestaurantListItem key={restaurant.id} id={restaurant.id} name={restaurant.name} shortDescription={restaurant.shortDescription} onRestaurantSelect={handleRestaurantSelect} />
-        ))}
-      </ListGroup>
+        <><SortComponent onSortOrderChange={handleSortOrderChange} sortOrder={sortOrder} />
 
-      {limitedData.length === 0 && 
-        <div>
-        <p>
-            Oosp, I couldn`t find anything based on your search of " <span className="font-bold">{searchTerm}</span> ". I`m not that
-            sophistacated just yet.{' '}
-        </p>    
-    </div>
+          <ListGroup>
+            {limitedData.map((restaurant) => (
+              <RestaurantListItem key={restaurant.id} id={restaurant.id} name={restaurant.name} shortDescription={restaurant.shortDescription} onRestaurantSelect={handleRestaurantSelect} />
+            ))}
+          </ListGroup></>
+
       }
 
-      {isLoading && <LoadingSpinner message="loading..."/>}
+      {isLoading && <LoadingSpinner message="loading..." />}
 
-      {!isLoading && !isPaginationLoading && (
+      {!isLoading && !isPaginationLoading && limitedData.length !== 0 && (
         <Button onClick={loadMore} aria-label="Load more restaurants">
           Load more
         </Button>

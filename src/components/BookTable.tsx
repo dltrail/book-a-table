@@ -120,8 +120,8 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
   return (
     <Container>
       <h2>Book a Table</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form onSubmit={handleSubmit} className="w-[320px]">
+        <Form.Group className="mb-3">
           <Form.Label>Name</Form.Label>
           <Form.Control type="text"
             id="name"
@@ -129,7 +129,8 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
             value={formData.name}
             onChange={handleInputChange} />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3" 
+        >
           <Form.Label>Email</Form.Label>
           <Form.Control type="email"
             id="email"
@@ -137,7 +138,8 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
             value={formData.email}
             onChange={handleInputChange} />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3" 
+        >
           <Form.Label>Phone</Form.Label>
           <Form.Control type="tel"
             id="phone"
@@ -145,7 +147,8 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
             value={formData.phone}
             onChange={handleInputChange} />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3" 
+        >
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="date"
@@ -155,7 +158,8 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
             onChange={handleInputChange}
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3" 
+        >
           <Form.Label>Time</Form.Label>
           <Form.Control type="time"
             id="time"
@@ -163,7 +167,8 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
             value={formData.time}
             onChange={handleInputChange} />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3" 
+        >
           <Form.Label>Guests</Form.Label>
           <Form.Control type="number"
             id="guests"
