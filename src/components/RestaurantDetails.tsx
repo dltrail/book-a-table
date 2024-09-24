@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Container } from "react-bootstrap";
 import { getRestaurantDetails } from "../services/api";
+import BookTable from "./BookTable";
 
 type RestaurantDetailsProps = {
   restaurantId: number;
@@ -35,7 +36,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     // Assuming you're fetching the data asynchronously
     getRestaurantDetails(restaurantId).then((data) => {
       setRests(data); // Set the details2 object after fetching
-      console.log(data)
       setIsLoading(false); // Set loading to false
     }).catch(err => {
       console.error('Error fetching data:', err);

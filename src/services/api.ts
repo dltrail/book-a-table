@@ -7,3 +7,4 @@ export const getRestaurantDetails = async (id: number) => {
   const response = await fetch(`http://localhost:3001/restaurants/${id}`);
   return response.json();
 };
+

@@ -1,80 +1,108 @@
-import React, { useEffect, useState } from "react";
-import { ListGroup, Container } from "react-bootstrap";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { ListGroup, Container, Spinner, Button } from "react-bootstrap";
 import { getRestaurants } from "../services/api";
-
-type Restaurant = {
-  id: number;
-  name: string;
-  shortDescription: string;
-};
+import { Restaurant } from "../types";
+import RestaurantListItem from "./RestaurantListItem";
+import LoadingSpinner from "./Loading";
 
 type RestaurantListProps = {
   onRestaurantSelect: (id: number) => void;
+  sortOrder: string
+  searchTerm: string
 };
 
 const RestaurantList: React.FC<RestaurantListProps> = ({
-  onRestaurantSelect,
+  onRestaurantSelect, sortOrder, searchTerm
 }) => {
-  const restaurants = [
-    {
-      id: 1,
-      name: "Velvet & Vine",
-      shortDescription: "A fine dining experience with a modern twist.",
-      cuisine: "French",
-      rating: 4.7,
-      details: {
-        id: 1,
-        address: "123 Fine St, London",
-        openingHours: {
-          weekday: "12:00 PM - 10:00 PM",
-          weekend: "11:00 AM - 11:00 PM",
-        },
-        reviewScore: 4.7,
-        contactEmail: "info@gourmetkitchen.com",
-      },
+
+  const [data, setData] = useState<Restaurant[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [paginationLimit, setPaginationLimit] = useState(10);
+  const [isPaginationLoading, setIsPaginationLoading] = useState(false);
+
+  // const [sortOrder, setSortOrder] = useState('asc'); // State for sorting order
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getRestaurants();
+        setData(response);
+      } catch (err) {
+        setError(`There was a problem fetching the restaurants: ${err}`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchRestaurants();
+  }, []);
+
+
+  const loadMore = useCallback(() => { //Using useCallback ensures that the functions are not recreated on every render.
+    setIsPaginationLoading(true);
+    setTimeout(() => {
+      setPaginationLimit((prevLimit) => prevLimit + 5);
+      setIsPaginationLoading(false);
+    }, 2000);
+  }, []);
+
+  const handleRestaurantSelect = useCallback(
+    (id: number) => {
+      onRestaurantSelect(id);
     },
-  ];
+    [onRestaurantSelect]
+  );
 
-  const [data, setData] = useState<Restaurant[]>([])
-  const [error, setError] = useState({
-    msg: '',
+  const restaurantsSortedByRating = [...data].sort((a, b) => {
+    const ratingA = a.rating;
+    const ratingB = b.rating;
+
+    return sortOrder === 'asc' ? ratingA - ratingB : ratingB - ratingA;
 });
-const [isLoading, setIsLoading] = useState(false);
 
-useEffect(() => {
-  getRestaurants()
-    .then((json) => {
-      setData(json);
-    })
-    .catch((err) => {
-      setError({
-        msg: `There was a problem fetching the properties: ${err}`,
-      });
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+const filteredProperties = restaurantsSortedByRating.filter(
+  (restaurant) => restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by location (or any other field)
+);
 
-}, []); // Empty dependency array, effect runs once
+const limitedData = useMemo(() => filteredProperties.slice(0, paginationLimit), [filteredProperties, paginationLimit]); // limitedData is memoized so it's only recalculated when data or paginationLimit changes.
 
+
+//   const handleSortOrderChange = (order: string) => {
+//     // Implement sorting logic based on the order parameter
+//     setSortOrder(order);
+// };
 
   return (
     <Container>
-      <h2>Restaurants</h2>
+      {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
+
+    
+
       <ListGroup>
-        {data.map((restaurant) => (
-          <ListGroup.Item
-            key={restaurant.id}
-            action
-            onClick={() => {
-              console.log(restaurant.id)
-              onRestaurantSelect(restaurant.id)}}
-          >
-            <h5>{restaurant.name}</h5>
-            <p>{restaurant.shortDescription}</p>
-          </ListGroup.Item>
+        {limitedData.map((restaurant) => (
+          <RestaurantListItem key={restaurant.id} id={restaurant.id} name={restaurant.name} shortDescription={restaurant.shortDescription} onRestaurantSelect={handleRestaurantSelect} />
         ))}
       </ListGroup>
+
+      {limitedData.length === 0 && 
+        <div>
+        <p>
+            Oosp, I couldn`t find anything based on your search of " <span className="font-bold">{searchTerm}</span> ". I`m not that
+            sophistacated just yet.{' '}
+        </p>    
+    </div>
+      }
+
+      {isLoading && <LoadingSpinner message="loading..."/>}
+
+      {!isLoading && !isPaginationLoading && (
+        <Button onClick={loadMore} aria-label="Load more restaurants">
+          Load more
+        </Button>
+      )}
+
+      {isPaginationLoading && <Spinner animation="border" role="status"><span className="sr-only">Loading more...</span></Spinner>}
     </Container>
   );
 };
