@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ListGroup, Container } from "react-bootstrap";
+import { getRestaurants } from "../services/api";
 
 type Restaurant = {
   id: number;
@@ -34,15 +35,40 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
     },
   ];
 
+  const [data, setData] = useState<Restaurant[]>([])
+  const [error, setError] = useState({
+    msg: '',
+});
+const [isLoading, setIsLoading] = useState(false);
+
+useEffect(() => {
+  getRestaurants()
+    .then((json) => {
+      setData(json);
+    })
+    .catch((err) => {
+      setError({
+        msg: `There was a problem fetching the properties: ${err}`,
+      });
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+
+}, []); // Empty dependency array, effect runs once
+
+
   return (
     <Container>
       <h2>Restaurants</h2>
       <ListGroup>
-        {restaurants.map((restaurant) => (
+        {data.map((restaurant) => (
           <ListGroup.Item
             key={restaurant.id}
             action
-            onClick={() => onRestaurantSelect(restaurant.id)}
+            onClick={() => {
+              console.log(restaurant.id)
+              onRestaurantSelect(restaurant.id)}}
           >
             <h5>{restaurant.name}</h5>
             <p>{restaurant.shortDescription}</p>
