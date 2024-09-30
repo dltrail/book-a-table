@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Container } from "react-bootstrap";
 import { getRestaurantDetails } from "../services/api";
 import BookTable from "./BookTable";
+import { StarRating } from "@dltrail/gs-frontend-toolkit";
 
 type RestaurantDetailsProps = {
   restaurantId: number;
@@ -10,12 +11,13 @@ type RestaurantDetailsProps = {
 type RestaurantDetailsData = {
   details: {
     address: string;
-    reviewScore: number;
+    reviewScore: number | null;
+    contactEmail: string;
     openingHours: {
       weekday: string;
       weekend: string;
     };
-  }
+  };
 
   contactEmail: string;
 };
@@ -24,39 +26,41 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   restaurantId,
 }) => {
 
-
   const [rests, setRests] = useState<RestaurantDetailsData>();
+  const { details } = rests || {};
+  const { address, reviewScore, openingHours, contactEmail } = details || {};
+  const { weekday, weekend } = openingHours || {};
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { details, contactEmail } = rests || {};
-  const { address, reviewScore,  } = details || {};
-  
   useEffect(() => {
     // Assuming you're fetching the data asynchronously
     getRestaurantDetails(restaurantId).then((data) => {
       setRests(data); // Set the details2 object after fetching
-      setIsLoading(false); // Set loading to false
+      console.log(data.details);
     }).catch(err => {
       console.error('Error fetching data:', err);
-      setIsLoading(false); // Ensure loading state is cleared in case of error
+
     });
   }, [restaurantId]);
-  
 
-  if(!restaurantId){ return null}
+
+  if (!restaurantId) { return null; }
 
 
   return (
     <Container>
       <Card>
         <Card.Body>
-          <Card.Title>Restaurant Details</Card.Title>
-          <Card.Text>Address: {address}</Card.Text>
-          <Card.Text>Review Score: {reviewScore}</Card.Text>
-          <Card.Text>Contact: {rests?.contactEmail}</Card.Text>
+          <Card.Title><h3 className="mb-4">Restaurant Details</h3></Card.Title>
+          <Card.Text><span className="font-bold">📍 Address:</span> {address}</Card.Text>
+          <Card.Text><span className="font-bold">⭐️ Review Score: </span>{reviewScore}</Card.Text>
+          <Card.Text><span className="font-bold">📧 Contact:</span> {contactEmail}</Card.Text>
+          <Card.Text className="flex flex-col"><span className="font-bold">⏰ Opening Hours:</span>
+            <span className="ml-12">Weekends: {weekend}</span>
+            <span className="ml-12">Weekdays: {weekday}</span>
+          </Card.Text>
         </Card.Body>
       </Card>
+
     </Container>
   );
 };

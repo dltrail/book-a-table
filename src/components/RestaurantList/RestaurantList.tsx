@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { ListGroup, Container, Spinner, Button } from "react-bootstrap";
+import { ListGroup, Container, Button } from "react-bootstrap";
 import { getRestaurants } from "../../services/api";
 import { Restaurant } from "../../types";
 import RestaurantListItem from "../RestaurantListItem/RestaurantListItem";
 import LoadingSpinner from "../Loading";
 import SortComponent from "../SortComponent";
 import NoResults from "../NoResults";
+import './RestaurantListStyles.scss';
 
 type RestaurantListProps = {
   onRestaurantSelect: (id: number) => void;
@@ -19,11 +20,11 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
   const [data, setData] = useState<Restaurant[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [paginationLimit, setPaginationLimit] = useState(10);
+  const [paginationLimit, setPaginationLimit] = useState(6);
   const [isPaginationLoading, setIsPaginationLoading] = useState(false);
 
   const [sortOrder, setSortOrder] = useState('asc'); // State for sorting order
-
+  const [selectedRestaurant, setSelectedRestaurant] = useState<number | null>(null);
 
   const handleSortOrderChange = (order: string) => {
     // Implement sorting logic based on the order parameter
@@ -59,6 +60,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
   const handleRestaurantSelect = useCallback(
     (id: number) => {
       onRestaurantSelect(id);
+      setSelectedRestaurant(id)
     },
     [onRestaurantSelect]
   );
@@ -93,7 +95,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
 
           <ListGroup>
             {limitedData.map((restaurant) => (
-              <RestaurantListItem key={restaurant.id} id={restaurant.id} name={restaurant.name} shortDescription={restaurant.shortDescription} onRestaurantSelect={handleRestaurantSelect} />
+              <RestaurantListItem key={restaurant.id} id={restaurant.id} name={restaurant.name} shortDescription={restaurant.shortDescription} onRestaurantSelect={handleRestaurantSelect} isSelected={restaurant.id === selectedRestaurant}/>
             ))}
           </ListGroup></>
 
@@ -101,13 +103,11 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
 
       {isLoading && <LoadingSpinner message="loading..." />}
 
-      {!isLoading && !isPaginationLoading && limitedData.length !== 0 && (
-        <Button onClick={loadMore} aria-label="Load more restaurants">
-          Load more
+      {!isLoading && limitedData.length !== 0 && (
+        <Button onClick={loadMore} aria-label="Load more restaurants"  className="text-center mx-auto inline-block mt-4 relative left-1/2 -translate-x-1/2 bg-[var(--primary-color)] border-[var(--primary-color)] hover:bg-white hover:text-[var(--primary-color)] hover:border-[var(--primary-color)]">
+         {isPaginationLoading ? 'Loading...': 'Load more'}
         </Button>
       )}
-
-      {isPaginationLoading && <Spinner animation="border" role="status"><span className="sr-only">Loading more...</span></Spinner>}
     </Container>
   );
 };

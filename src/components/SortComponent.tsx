@@ -10,7 +10,7 @@ const SortComponent: React.FC<SortProps> = ({
 }) => {
 
     return (
-        <div className="text-right my-4">
+        <div className="text-right mb-4">
             <label htmlFor="sort">Sort by: </label>
             <select className='border-[1px] p-2' name="sort" onChange={(e) => onSortOrderChange(e.target.value)}>
                 <option value="asc">Lowest rating</option>

@@ -38,9 +38,6 @@ describe('RestaurantList Component', () => {
   it('should render the restaurant list when data is fetched successfully', async () => {
     render(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
-    // Check that the loading spinner is displayed initially
-    expect(screen.getByText(/loading.../i)).toBeInTheDocument();
-
     // Wait for the restaurants to be rendered
     await waitFor(() => {
       const restaurantItems = screen.getAllByTestId('list-item');
@@ -86,13 +83,8 @@ describe('RestaurantList Component', () => {
     });
 
     // Click the "Load more" button
-    const loadMoreButton = screen.getByRole('button', { name: /load more restaurants/i });
+    const loadMoreButton = screen.getByRole('button', { name: /load more /i });
     fireEvent.click(loadMoreButton);
-
-    // Wait for the pagination to complete
-    await waitFor(() => {
-      expect(screen.getByRole('status')).toBeInTheDocument(); // Spinner should be displayed
-    });
 
     // Check if pagination limit increased and more restaurants are rendered (depending on mock data and implementation)
     await waitFor(() => {

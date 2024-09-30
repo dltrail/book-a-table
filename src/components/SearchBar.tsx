@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@dltrail/gs-frontend-toolkit';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -12,14 +13,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSearchChange, onCle
       <input
         className="border-[1px] border-black p-2 w-3/4 mx-auto my-4"
         type="text"
-        placeholder="Search properties..."
+        placeholder="Search restaurants..."
         value={searchTerm}
-        onChange={onSearchChange} // Handle input change
+        onChange={onSearchChange}
       />
       {searchTerm && (
-        <button onClick={onClearSearch}>
+        <Button onClick={onClearSearch} variation={'filled'} disabled={searchTerm? false: true}>
           Clear search
-        </button>
+        </Button>
       )}
     </div>
   );

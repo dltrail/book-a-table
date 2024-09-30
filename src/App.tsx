@@ -14,8 +14,7 @@ function App() {
     number | null
   >(null);
 
-  const [searchTerm, setSearchTerm] = useState(''); // Search term state
-
+  const [searchTerm, setSearchTerm] = useState(''); 
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
