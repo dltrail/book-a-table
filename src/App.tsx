@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./index.css";
 import { Col, Container, Row } from "react-bootstrap";
-import RestaurantList from "./components/RestaurantList";
+import RestaurantList from "./components/RestaurantList/RestaurantList";
 import RestaurantDetails from "./components/RestaurantDetails";
 import BookTable from "./components/BookTable";
 import Heading from "./components/Heading";

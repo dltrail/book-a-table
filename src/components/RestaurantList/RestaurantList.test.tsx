@@ -1,5 +1,5 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import RestaurantList from '../RestaurantList';
+import RestaurantList from './RestaurantList';
 import { getRestaurants } from '../../services/api'
 import { Restaurant } from '../../types';
 

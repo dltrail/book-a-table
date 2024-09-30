@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { ListGroup, Container, Spinner, Button } from "react-bootstrap";
-import { getRestaurants } from "../services/api";
-import { Restaurant } from "../types";
-import RestaurantListItem from "./RestaurantListItem";
-import LoadingSpinner from "./Loading";
-import SortComponent from "./SortComponent";
-import NoResults from "./NoResults";
+import { getRestaurants } from "../../services/api";
+import { Restaurant } from "../../types";
+import RestaurantListItem from "../RestaurantListItem/RestaurantListItem";
+import LoadingSpinner from "../Loading";
+import SortComponent from "../SortComponent";
+import NoResults from "../NoResults";
 
 type RestaurantListProps = {
   onRestaurantSelect: (id: number) => void;
