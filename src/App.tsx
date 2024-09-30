@@ -7,7 +7,6 @@ import RestaurantList from "./components/RestaurantList";
 import RestaurantDetails from "./components/RestaurantDetails";
 import BookTable from "./components/BookTable";
 import Heading from "./components/Heading";
-import SortComponent from "./components/SortComponent";
 import SearchBar from "./components/SearchBar";
 
 function App() {
@@ -15,14 +14,8 @@ function App() {
     number | null
   >(null);
 
-  // const [sortOrder, setSortOrder] = useState('asc'); // State for sorting order
   const [searchTerm, setSearchTerm] = useState(''); // Search term state
 
-
-  // const handleSortOrderChange = (order: string) => {
-  //   // Implement sorting logic based on the order parameter
-  //   setSortOrder(order);
-  // };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -34,45 +27,41 @@ function App() {
 
 
   return (
-  
+    <Container >
+      <Row>
+        <Col md={12}>
+          <Heading />
+        </Col>
+      </Row>
+
+      <Row>
+        <SearchBar
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          onClearSearch={handleClearSearch}
+        />
+      </Row>
+
+      <Row>
+      </Row>
+      <Row>
+        <Col md={4}>
+          <RestaurantList onRestaurantSelect={setSelectedRestaurantId} searchTerm={searchTerm} />
+
+        </Col>
+        <Col md={8}>
+          {selectedRestaurantId && (
+            <>
+              <RestaurantDetails restaurantId={selectedRestaurantId} />
+              <BookTable restaurantId={selectedRestaurantId} />
+            </>
+          )}
+        </Col>
+      </Row>
+    </Container>
+
+  );
+};
 
 
-      <Container >
-        <Row>
-          <Col md={12}>
-            <Heading />
-          </Col>
-        </Row>
-
-        <Row>
-
-
-          <SearchBar
-            searchTerm={searchTerm}
-            onSearchChange={handleSearchChange}
-            onClearSearch={handleClearSearch}
-          />
-        </Row>
-
-        <Row>
-        </Row>
-        <Row>
-          <Col md={4}>
-            <RestaurantList onRestaurantSelect={setSelectedRestaurantId} searchTerm={searchTerm} />
-
-          </Col>
-          <Col md={8}>
-            {selectedRestaurantId && (
-              <>
-                <RestaurantDetails restaurantId={selectedRestaurantId} />
-                <BookTable restaurantId={selectedRestaurantId} />
-              </>
-            )}
-          </Col>
-        </Row>
-      </Container>
-
-  )};
-
-
-  export default App;
+export default App;
