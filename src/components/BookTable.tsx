@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
+import {Button} from "@dltrail/gs-frontend-toolkit"
 
 interface BookTableProps {
   restaurantId: number; // Prop for the restaurant ID
@@ -176,7 +177,7 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
             onChange={handleInputChange} />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button type="submit" variation={"filled"}>
           Submit
         </Button>
       </Form>
