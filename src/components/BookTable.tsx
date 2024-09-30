@@ -15,7 +15,6 @@ const BookTable: React.FC<BookTableProps> = (restaurantId) => {
     time: "",
     guests: "",
     restaurant: restaurantId
-
   });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
