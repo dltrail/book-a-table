@@ -1,8 +1,8 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import RestaurantList from './RestaurantList';
-import { RestaurantProvider } from '../../context/restaurantContext';
-import { getRestaurants } from '../../services/api';
-import { Restaurant } from '../../types';
+import RestaurantList from '../RestaurantList';
+import { RestaurantProvider } from '../../../context/restaurantContext';
+import { getRestaurants } from '../../../services/api';
+import { Restaurant } from '../../../types';
 
 // Mocking the getRestaurants API function
 jest.mock('../../services/api', () => ({

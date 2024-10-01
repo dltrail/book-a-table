@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, Container } from "react-bootstrap";
-import { getRestaurantDetails } from "../services/api";
-import BookTable from "./BookTable";
-import { StarRating } from "@dltrail/gs-frontend-toolkit";
+import { getRestaurantDetails } from "../../services/api";
 
 type RestaurantDetailsProps = {
   restaurantId: number;

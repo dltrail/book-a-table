@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { ListGroup, Container, Button } from 'react-bootstrap';
 import { RestaurantContext } from '../../context/restaurantContext';
 import RestaurantListItem from '../RestaurantListItem/RestaurantListItem';
-import LoadingSpinner from '../Loading';
+import LoadingSpinner from '../Loading/Loading';
 import SortComponent from '../SortComponent';
 import NoResults from '../NoResults';
 import './RestaurantListStyles.scss';

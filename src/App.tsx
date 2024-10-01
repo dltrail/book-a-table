@@ -4,7 +4,7 @@ import "./App.css";
 import "./index.css";
 import { Col, Container, Row } from "react-bootstrap";
 import RestaurantList from "./components/RestaurantList/RestaurantList";
-import RestaurantDetails from "./components/RestaurantDetails";
+import RestaurantDetails from "./components/RestaurantDetails/RestaurantDetails";
 import BookTable from "./components/BookTable";
 import Heading from "./components/Heading";
 import SearchBar from "./components/SearchBar";
