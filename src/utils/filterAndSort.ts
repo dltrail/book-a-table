@@ -1,8 +1,9 @@
 import { Restaurant } from '../types';
 
+// Sort by rating
 export const sortRestaurantsByRating = (
   restaurants: Restaurant[],
-  sortOrder: 'asc' | 'desc' = 'asc'
+  sortOrder: string
 ): Restaurant[] => {
   return [...restaurants].sort((a, b) => {
     const ratingA = a.rating;

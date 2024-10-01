@@ -6,6 +6,7 @@ import LoadingSpinner from '../Loading/Loading';
 import SortComponent from '../SortComponent';
 import NoResults from '../NoResults';
 import './RestaurantListStyles.scss';
+import { sortRestaurantsByRating } from '../../utils/filterAndSort';
 
 type RestaurantListProps = {
   onRestaurantSelect: (id: number) => void;
@@ -13,7 +14,7 @@ type RestaurantListProps = {
 };
 
 const RestaurantList: React.FC<RestaurantListProps> = ({ onRestaurantSelect, searchTerm }) => {
-  const context = useContext(RestaurantContext);
+  const context = useContext(RestaurantContext)
 
   if (!context) {
     throw new Error('RestaurantList must be used within a RestaurantProvider');
@@ -37,12 +38,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ onRestaurantSelect, sea
     setSelectedRestaurant(id);
   };
 
-  const restaurantsSortedByRating = [...restaurants].sort((a, b) => {
-    const ratingA = a.rating;
-    const ratingB = b.rating;
-
-    return sortOrder === 'asc' ? ratingA - ratingB : ratingB - ratingA;
-  });
+  const restaurantsSortedByRating = sortRestaurantsByRating(restaurants, sortOrder)
 
   const filteredProperties = restaurantsSortedByRating.filter((restaurant) =>
     restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
