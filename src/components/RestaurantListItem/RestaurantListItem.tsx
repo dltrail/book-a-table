@@ -17,8 +17,8 @@ const RestaurantList: React.FC<RestaurantListItemProps> = ({
  const handleRestaurantListItemClicked = (id: number) => {
     onRestaurantSelect(id);
     window.scrollTo({
-      top: 0,      // Scroll to the top of the page
-      behavior: 'smooth',  // Smooth scrolling animation
+      top: 0,
+      behavior: 'smooth',
     });
   }
 

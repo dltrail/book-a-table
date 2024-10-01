@@ -11,11 +11,6 @@ export type RestaurantContextProps = {
   restaurants: Restaurant[]
   error: string | null
   isLoading: boolean
-  loadMore: () => void
-  paginationLimit: number
-  isPaginationLoading: boolean
-  sortOrder: sortOrder
-  setSortOrder: (order: SortOrder) => void
   selectedRestaurant: number | null
   setSelectedRestaurant: (id: number | null) => void
 }
