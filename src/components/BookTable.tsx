@@ -125,6 +125,8 @@ const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
     } catch (err) {
       console.log(err);
       setErrorMessage("An error occurred while processing your booking. Please try again.");
+    } finally {
+      console.log("Completed request");
     }
   };
 
