@@ -33,7 +33,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     // Assuming you're fetching the data asynchronously
     getRestaurantDetails(restaurantId).then((data) => {
       setRests(data); // Set the details2 object after fetching
-      console.log(data.details);
     }).catch(err => {
       console.error('Error fetching data:', err);
 
