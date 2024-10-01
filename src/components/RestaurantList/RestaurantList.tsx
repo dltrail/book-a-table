@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext} from 'react';
 import { ListGroup, Container, Button } from 'react-bootstrap';
 import { RestaurantContext } from '../../context/restaurantContext';
 import RestaurantListItem from '../RestaurantListItem/RestaurantListItem';

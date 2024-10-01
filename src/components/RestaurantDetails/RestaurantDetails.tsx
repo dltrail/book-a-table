@@ -30,18 +30,15 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   const { weekday, weekend } = openingHours || {};
 
   useEffect(() => {
-    // Assuming you're fetching the data asynchronously
     getRestaurantDetails(restaurantId).then((data) => {
-      setRests(data); // Set the details2 object after fetching
+      setRests(data); 
     }).catch(err => {
       console.error('Error fetching data:', err);
 
     });
   }, [restaurantId]);
 
-
   if (!restaurantId) { return null; }
-
 
   return (
     <Container>

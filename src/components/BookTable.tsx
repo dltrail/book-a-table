@@ -6,11 +6,6 @@ interface BookTableProps {
   restaurantId: number;
 }
 
-/* 
-Destructure prop correctly using {} instead of as a single argument to avoid performance issues
-If you pass the entire props object as a single parameter, React has to check the entire object for changes, which can be less efficient than checking specific values. By destructuring, you make it clear which props your component uses, potentially optimizing re-renders
-Improves readibility and maintainabilty
-*/
 const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
 
   const [formData, setFormData] = useState({
@@ -19,7 +14,7 @@ const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
     phone: "",
     date: "",
     time: "",
-    guests: 0, // This should not be a string!!! you shouldn't have to use parseInt
+    guests: 0,
     restaurant: restaurantId
   });
 
@@ -27,7 +22,7 @@ const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
   const [isBookingSuccessful, setIsBookingSuccessful] = useState(false);
 
   useEffect(() => {
-    // Reset form fields, error message, and booking status when restaurantId changes
+
     setFormData((prevData) => ({
       ...prevData,
       name: "",
@@ -43,7 +38,6 @@ const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
   }, [restaurantId]);
 
 
-  // Update formData when input changes
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
@@ -55,41 +49,6 @@ const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
     []
   );
 
- /*
- Move validation functions to a new file to improve perframce and organisation within the codebase. This way, these functions won't have to be recreated everytime the component renders as they won't be defined in it scope anymore
-*/
-
-  // Basic email validation
-  // const isValidEmail = useCallback((email: string) => {
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return emailRegex.test(email);
-  // }, []);
-
-  // Basic phone number validation
-  // const isValidPhone = (phone: string) => {
-  //   const phoneRegex = /^[0-9]{7,15}$/; // Allows 7 to 15 digits
-  //   return phoneRegex.test(phone);
-  // };
-
-  // const validateFormData = (data: { name: any; email: any; phone: any; date: any; time: any; guests: any; }) => {
-  //   const { name, email, phone, date, time, guests } = data;
-  //   const bookingDateTime = new Date(`${date}T${time}`);
-  //   const currentTime = new Date();
-  //   const oneHourInMillis = 60 * 60 * 1000;
-  //   if (!name || !email || !phone) return "Please fill out all required fields.";
-  //   if (!isValidEmail(email)) return "Please enter a valid email.";
-  //   if (!isValidPhone(phone)) return "Please enter a valid phone number.";
-  //   if (!date || !time) return "Please select a valid date and time.";
-  //   if (parseInt(guests) > 12) return `Bookings are limited to 12people.`;
-
-  //   if (bookingDateTime.getTime() < currentTime.getTime() + oneHourInMillis) {
-  //     return "Bookings must be scheduled at least 1 hour in the future.";
-  //   }
-  //   return null;
-  // };
-
-  /* Batch state updates below */
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -97,7 +56,6 @@ const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
 
     const error = validateFormData(formData);
     if (error) return setErrorMessage(error);
-
 
     try {
       const response = await fetch("http://localhost:3001/bookings", {
@@ -125,8 +83,6 @@ const BookTable: React.FC<BookTableProps> = ({restaurantId}) => {
     } catch (err) {
       console.log(err);
       setErrorMessage("An error occurred while processing your booking. Please try again.");
-    } finally {
-      console.log("Completed request");
     }
   };
 

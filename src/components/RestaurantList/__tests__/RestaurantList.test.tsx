@@ -47,13 +47,11 @@ describe('RestaurantList Component', () => {
   it('should render the restaurant list when data is fetched successfully', async () => {
     renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
-    // Wait for the restaurants to be rendered
     await waitFor(() => {
       const restaurantItems = screen.getAllByTestId('list-item');
-      expect(restaurantItems).toHaveLength(2); // Expecting 2 restaurants to be rendered
+      expect(restaurantItems).toHaveLength(2);
     });
 
-    // Check for specific restaurant details
     expect(screen.getByText('Restaurant A')).toBeInTheDocument();
     expect(screen.getByText('A great place for Italian cuisine.')).toBeInTheDocument();
     expect(screen.getByText('Restaurant B')).toBeInTheDocument();
@@ -61,12 +59,10 @@ describe('RestaurantList Component', () => {
   });
 
   it('should display an error message if fetching data fails', async () => {
-    // Mock the API call to reject
     (getRestaurants as jest.Mock).mockRejectedValue('API Error');
 
     renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
-    // Wait for the error message to appear
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
         'There was a problem fetching the restaurants: API Error'
@@ -77,7 +73,6 @@ describe('RestaurantList Component', () => {
   it('should render NoResults component when no restaurants match the search term', async () => {
     renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="Nonexistent" />);
 
-    // Wait for the NoResults component to be rendered
     await waitFor(() => {
       expect(screen.getByText(/Sorry, we couldn`t find anything based on your search of/i)).toBeInTheDocument();
     });
@@ -86,16 +81,13 @@ describe('RestaurantList Component', () => {
   it('should load more restaurants when "Load more" button is clicked', async () => {
     renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
-    // Wait for initial restaurants to be rendered
     await waitFor(() => {
       expect(screen.getAllByTestId('list-item')).toHaveLength(2);
     });
 
-    // Click the "Load more" button
     const loadMoreButton = screen.getByRole('button', { name: /load more /i });
     fireEvent.click(loadMoreButton);
 
-    // Check if pagination limit increased and more restaurants are rendered (depending on mock data and implementation)
     await waitFor(() => {
       expect(screen.getAllByTestId('list-item')).toHaveLength(2); // Assuming still 2 as mock doesn't add more
     });
@@ -104,17 +96,14 @@ describe('RestaurantList Component', () => {
   it('should call onRestaurantSelect when a restaurant is selected', async () => {
     renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
-    // Wait for restaurants to be rendered
     await waitFor(() => {
       const restaurantItems = screen.getAllByTestId('list-item');
       expect(restaurantItems).toHaveLength(2);
     });
 
-    // Click on the first restaurant item
     const firstRestaurant = screen.getByText('Restaurant A');
     fireEvent.click(firstRestaurant);
 
-    // Check if the onRestaurantSelect callback is called with the correct ID
     expect(onRestaurantSelect).toHaveBeenCalledWith(1);
   });
 })
