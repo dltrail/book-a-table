@@ -6,7 +6,8 @@ import LoadingSpinner from '../Loading/Loading';
 import SortComponent from '../SortComponent';
 import NoResults from '../NoResults';
 import './RestaurantListStyles.scss';
-import { sortRestaurantsByRating } from '../../utils/filterAndSort';
+import { filteredRestaurants, sortRestaurantsByRating } from '../../utils/filterAndSort';
+import { Restaurant } from '../../types';
 
 type RestaurantListProps = {
   onRestaurantSelect: (id: number) => void;
@@ -25,7 +26,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ onRestaurantSelect, sea
     error,
     isLoading,
     loadMore,
-    paginationLimit,
+    // paginationLimit,
     isPaginationLoading,
     sortOrder,
     setSortOrder,
@@ -33,18 +34,13 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ onRestaurantSelect, sea
     setSelectedRestaurant,
   } = context;
 
+  const restaurantsSortedByRating = sortRestaurantsByRating(restaurants, sortOrder)
+  const limitedData = filteredRestaurants(restaurantsSortedByRating, searchTerm)
+
   const handleRestaurantSelect = (id: number) => {
     onRestaurantSelect(id);
     setSelectedRestaurant(id);
   };
-
-  const restaurantsSortedByRating = sortRestaurantsByRating(restaurants, sortOrder)
-
-  const filteredProperties = restaurantsSortedByRating.filter((restaurant) =>
-    restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const limitedData = useMemo(() => filteredProperties.slice(0, paginationLimit), [filteredProperties, paginationLimit]);
 
   return (
     <Container>
@@ -56,7 +52,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ onRestaurantSelect, sea
         <>
           <SortComponent onSortOrderChange={setSortOrder} sortOrder={sortOrder} />
           <ListGroup>
-            {limitedData.map((restaurant) => (
+            {limitedData.map((restaurant: Restaurant) => (
               <RestaurantListItem
                 key={restaurant.id}
                 id={restaurant.id}
