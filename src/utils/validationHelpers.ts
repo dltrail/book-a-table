@@ -35,6 +35,5 @@ export const validateFormData = (data: BookingData): string | null => {
     if (bookingDateTime.getTime() < currentTime.getTime() + oneHourInMillis) {
         return "Bookings must be scheduled at least 1 hour in the future.";
     }
-    
     return null;
 };
