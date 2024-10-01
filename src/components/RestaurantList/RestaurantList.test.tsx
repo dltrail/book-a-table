@@ -1,6 +1,7 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import RestaurantList from './RestaurantList';
-import { getRestaurants } from '../../services/api'
+import { RestaurantProvider } from '../../context/restaurantContext';
+import { getRestaurants } from '../../services/api';
 import { Restaurant } from '../../types';
 
 // Mocking the getRestaurants API function
@@ -23,6 +24,14 @@ const mockRestaurants: Restaurant[] = [
   },
 ];
 
+const renderWithProvider = (ui: React.ReactElement) => {
+  return render(
+    <RestaurantProvider>
+      {ui}
+    </RestaurantProvider>
+  );
+};
+
 describe('RestaurantList Component', () => {
   const onRestaurantSelect = jest.fn();
 
@@ -36,7 +45,7 @@ describe('RestaurantList Component', () => {
   });
 
   it('should render the restaurant list when data is fetched successfully', async () => {
-    render(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
+    renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
     // Wait for the restaurants to be rendered
     await waitFor(() => {
@@ -55,7 +64,7 @@ describe('RestaurantList Component', () => {
     // Mock the API call to reject
     (getRestaurants as jest.Mock).mockRejectedValue('API Error');
 
-    render(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
+    renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
     // Wait for the error message to appear
     await waitFor(() => {
@@ -66,7 +75,7 @@ describe('RestaurantList Component', () => {
   });
 
   it('should render NoResults component when no restaurants match the search term', async () => {
-    render(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="Nonexistent" />);
+    renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="Nonexistent" />);
 
     // Wait for the NoResults component to be rendered
     await waitFor(() => {
@@ -75,7 +84,7 @@ describe('RestaurantList Component', () => {
   });
 
   it('should load more restaurants when "Load more" button is clicked', async () => {
-    render(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
+    renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
     // Wait for initial restaurants to be rendered
     await waitFor(() => {
@@ -93,7 +102,7 @@ describe('RestaurantList Component', () => {
   });
 
   it('should call onRestaurantSelect when a restaurant is selected', async () => {
-    render(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
+    renderWithProvider(<RestaurantList onRestaurantSelect={onRestaurantSelect} searchTerm="" />);
 
     // Wait for restaurants to be rendered
     await waitFor(() => {
@@ -108,4 +117,4 @@ describe('RestaurantList Component', () => {
     // Check if the onRestaurantSelect callback is called with the correct ID
     expect(onRestaurantSelect).toHaveBeenCalledWith(1);
   });
-});
+})

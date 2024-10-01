@@ -8,6 +8,7 @@ import RestaurantDetails from "./components/RestaurantDetails";
 import BookTable from "./components/BookTable";
 import Heading from "./components/Heading";
 import SearchBar from "./components/SearchBar";
+import { RestaurantProvider } from "./context/restaurantContext";
 
 function App() {
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<
@@ -26,6 +27,7 @@ function App() {
 
 
   return (
+    <RestaurantProvider>
     <Container >
       <Row>
         <Col md={12}>
@@ -58,7 +60,7 @@ function App() {
         </Col>
       </Row>
     </Container>
-
+</RestaurantProvider>
   );
 };
 
