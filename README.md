@@ -9,7 +9,7 @@ React, Context API, TailwindCSS
 
 ## Installation
 
-Install Todo Tamer  with npm
+Install app with npm
 ```bash
 # npm
 npm install
